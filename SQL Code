@@ -3,19 +3,19 @@
 -- Checking to make sure data populated upon import of the files.
 
 SELECT *
-FROM PortfolioProjectWalkthrough..CovidDeaths
+FROM CovidDeaths
 
 SELECT * 
-FROM PortfolioProjectWalkthrough..CovidVaccinations
+FROM CovidVaccinations
 
 
 SELECT Location, date, total_cases, new_cases, total_deaths, population
-FROM PortfolioProjectWalkthrough..CovidDeaths
+FROM CovidDeaths
 ORDER BY 1
 
 
 SELECT Location, date, total_cases, total_deaths, total_deaths / NULLIF(total_cases, 0) AS MortRate
-FROM PortfolioProjectWalkthrough..CovidDeaths
+FROM CovidDeaths
 ORDER BY 5
 
 --SSMS Complained that 'Operand data type varchar is invalid for divide operator'.
