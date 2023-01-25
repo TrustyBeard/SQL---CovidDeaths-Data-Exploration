@@ -1,0 +1,31 @@
+
+
+-- Checking to make sure data populated upon import of the files.
+
+SELECT *
+FROM PortfolioProjectWalkthrough..CovidDeaths
+
+SELECT * 
+FROM PortfolioProjectWalkthrough..CovidVaccinations
+
+
+SELECT Location, date, total_cases, new_cases, total_deaths, population
+FROM PortfolioProjectWalkthrough..CovidDeaths
+ORDER BY 1
+
+
+SELECT Location, date, total_cases, total_deaths, total_deaths / NULLIF(total_cases, 0) AS MortRate
+FROM PortfolioProjectWalkthrough..CovidDeaths
+ORDER BY 5
+
+--SSMS Complained that 'Operand data type varchar is invalid for divide operator'.
+
+SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='CovidDeaths'
+
+-- All data types in table CovidDeaths that was imported to this project were varchar.
+-- A conversion to a different data type is needed to apply a divide operator.
+
+ALTER TABLE CovidDeaths
+ALTER COLUMN total_cases float;
+ALTER TABLE CovidDeaths
+ALTER COLUMN total_deaths float;
