@@ -60,7 +60,8 @@ GROUP BY Location
 ORDER BY DeathCount DESC
 
 
-SELECT date, SUM(CAST(new_cases AS int)) AS Cases, SUM(Cast(new_deaths AS int)) AS Deaths, SUM(Cast(new_deaths AS float))/NULLIF(SUM(CAST(new_cases AS float)),0) * 100 AS MortRate
+SELECT date, SUM(CAST(new_cases AS int)) AS Cases, SUM(Cast(new_deaths AS int)) AS Deaths
+, SUM(Cast(new_deaths AS float))/NULLIF(SUM(CAST(new_cases AS float)),0) * 100 AS MortRate
 FROM CovidDeaths
 WHERE continent <> ''
 GROUP BY date
