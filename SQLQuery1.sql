@@ -34,24 +34,31 @@ ALTER COLUMN total_deaths float;
 
 ALTER TABLE CovidDeaths
 ALTER COLUMN date date;
+ALTER TABLE CovidVaccinations
+ALTER COLUMN date date;
+
 
 SELECT Location, date, total_cases, total_deaths, total_deaths / NULLIF(total_cases, 0) * 100 AS MortalityRate
 FROM CovidDeaths
 WHERE location like '%states%'
 ORDER BY 1, 2
 
+
 ALTER TABLE CovidDeaths
 ALTER COLUMN population bigint;
+
 
 SELECT Location, date, population, total_cases, (total_cases/population) * 100 AS InfectionRate
 FROM CovidDeaths
 WHERE location like '%states%'
 ORDER BY 1, 2
 
+
 SELECT Location, population, MAX(total_cases) AS InfectionCount, MAX((total_cases/NULLIF(population, 0))) * 100 AS InfectionRate
 FROM CovidDeaths
 GROUP BY Location, population
 ORDER BY InfectionRate DESC
+
 
 SELECT Location, MAX(total_deaths) AS DeathCount
 FROM CovidDeaths
@@ -67,6 +74,7 @@ WHERE continent <> ''
 GROUP BY date
 ORDER BY 1
 
+
 CREATE PROC RollingVacCount @location nvarchar(30)
 AS
 SELECT dea.continent, dea.location, dea.date, vac.new_vaccinations,
@@ -79,7 +87,9 @@ JOIN CovidVaccinations vac
 WHERE dea.continent <> '' and dea.location = @location
 ORDER BY 2,3
 
+
 EXEC RollingVacCount @location = 'Japan'
+
 
 WITH PopvsVac (Continent, Location, Date, Population, new_vaccinations, RollingVacCnt)
 AS
@@ -98,6 +108,7 @@ FROM PopvsVac
 WHERE location like '%States%'
 ORDER BY 2,3
 
+
 DROP TABLE IF exists #PercentPopulationVaccinated
 CREATE TABLE #PercentPopulationVaccinated
 (
@@ -108,6 +119,7 @@ population numeric,
 new_vaccinations numeric,
 RollingVacCnt numeric
 )
+
 
 INSERT INTO #PercentPopulationVaccinated
 SELECT dea.continent, dea.location, dea.date, dea.population, TRY_CAST(vac.new_vaccinations as numeric),
@@ -120,9 +132,11 @@ JOIN CovidVaccinations vac
 WHERE dea.continent <> ''
 ORDER BY 2,3
 
+
 SELECT *, (CONVERT(int, RollingVacCnt)/CONVERT(float, NULLIF(Population, 0))) * 100 AS PercentVaccinated
 FROM #PercentPopulationVaccinated
 WHERE location like '%Emirates%'
+
 
 CREATE VIEW PercentPopulationVaccinated as
 SELECT dea.continent, dea.location, dea.date, dea.population, TRY_CAST(vac.new_vaccinations as numeric) AS new_vaccinations,
@@ -134,5 +148,7 @@ JOIN CovidVaccinations vac
 	and dea.date = vac.date
 WHERE dea.continent <> ''
 
+
 SELECT *
 FROM PercentPopulationVaccinated
+
