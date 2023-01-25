@@ -20,9 +20,9 @@ ORDER BY 5
 
 SELECT * from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='CovidDeaths'
 
- All data types in table CovidDeaths that was imported to this project were varchar.
- A conversion to a different data type is needed to apply a divide operator
- and since the import as varchar data type was erroneous altering the table is warranted
+-- All data types in table CovidDeaths that was imported to this project were varchar.
+-- A conversion to a different data type is needed to apply a divide operator
+-- and since the import as varchar data type was erroneous altering the table is warranted
 
 ALTER TABLE CovidDeaths
 ALTER COLUMN total_cases float;
@@ -30,7 +30,7 @@ ALTER TABLE CovidDeaths
 ALTER COLUMN total_deaths float;
 
 
- Dates must also be updated for sensible ordering
+--Dates must also be updated for sensible ordering
 
 ALTER TABLE CovidDeaths
 ALTER COLUMN date date;
@@ -92,7 +92,6 @@ JOIN CovidVaccinations vac
 	ON dea.location = vac.location
 	and dea.date = vac.date
 WHERE dea.continent <> ''
---ORDER BY 2,3
 )
 SELECT *, (CONVERT(int, RollingVacCnt)/CONVERT(float, NULLIF(Population, 0))) * 100 AS PercentVaccinated
 FROM PopvsVac
